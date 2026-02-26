@@ -1,0 +1,160 @@
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { useConvexAuth, useMutation, useQuery } from "convex/react";
+import { useEffect, useState } from "react";
+import { api } from "../../convex/_generated/api";
+import type { Id } from "../../convex/_generated/dataModel";
+import { Header } from "../components/layout/Header";
+import { Sidebar } from "../components/layout/Sidebar";
+import { LiveMap } from "../components/map/LiveMap";
+import { WorkerList } from "../components/workers/WorkerList";
+import { SendCommand } from "../components/commands/SendCommand";
+import { AddWorker } from "../components/workers/AddWorker";
+import { OrgSetup } from "../components/organizations/OrgSetup";
+import { OrgPanel } from "../components/organizations/OrgPanel";
+
+export const Route = createFileRoute("/")({
+  component: DashboardPage,
+});
+
+function DashboardPage() {
+  const { isAuthenticated, isLoading } = useConvexAuth();
+  const navigate = useNavigate();
+  const ensureWorker = useMutation(api.workers.ensureWorker);
+  const [selectedWorkerId, setSelectedWorkerId] =
+    useState<Id<"workers"> | null>(null);
+  const [showCommandPanel, setShowCommandPanel] = useState(false);
+  const [commandTargetId, setCommandTargetId] =
+    useState<Id<"workers"> | null>(null);
+  const [showOnlyOnDuty, setShowOnlyOnDuty] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [showAddWorker, setShowAddWorker] = useState(false);
+  const [showOrgSetup, setShowOrgSetup] = useState(false);
+  const [showOrgPanel, setShowOrgPanel] = useState(false);
+
+  useEffect(() => {
+    if (!isLoading && !isAuthenticated) {
+      navigate({ to: "/login" });
+    }
+  }, [isAuthenticated, isLoading, navigate]);
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      ensureWorker({ role: "admin" });
+    }
+  }, [isAuthenticated, ensureWorker]);
+
+  const workers = useQuery(
+    api.workers.listWorkers,
+    isAuthenticated ? {} : "skip"
+  );
+
+  const organization = useQuery(
+    api.organizations.getMyOrganization,
+    isAuthenticated ? {} : "skip"
+  );
+
+  if (isLoading) {
+    return (
+      <div className="flex h-screen items-center justify-center bg-gray-950">
+        <div className="text-lg text-gray-400">Loading...</div>
+      </div>
+    );
+  }
+
+  if (!isAuthenticated) return null;
+
+  const filteredWorkers = showOnlyOnDuty
+    ? workers?.filter((w) => w.isOnDuty)
+    : workers;
+
+  const handleSendCommand = (workerId: Id<"workers">) => {
+    setCommandTargetId(workerId);
+    setShowCommandPanel(true);
+  };
+
+  const hasOrg = !!organization;
+  const orgLoaded = organization !== undefined;
+
+  return (
+    <div className="flex h-screen flex-col bg-gray-950 text-white">
+      <Header
+        sidebarOpen={sidebarOpen}
+        onToggleSidebar={() => setSidebarOpen(!sidebarOpen)}
+        onOpenOrgPanel={() => setShowOrgPanel(true)}
+        onOpenOrgSetup={() => setShowOrgSetup(true)}
+      />
+
+      <div className="flex flex-1 overflow-hidden">
+        {hasOrg && sidebarOpen && (
+          <Sidebar>
+            <WorkerList
+              workers={filteredWorkers ?? []}
+              selectedWorkerId={selectedWorkerId}
+              onSelectWorker={setSelectedWorkerId}
+              onSendCommand={handleSendCommand}
+              onAddWorker={() => setShowAddWorker(true)}
+              showOnlyOnDuty={showOnlyOnDuty}
+              onToggleOnDuty={() => setShowOnlyOnDuty(!showOnlyOnDuty)}
+            />
+          </Sidebar>
+        )}
+
+        <main className="relative flex-1">
+          {hasOrg ? (
+            <>
+              <LiveMap
+                workers={filteredWorkers ?? []}
+                selectedWorkerId={selectedWorkerId}
+                onSelectWorker={setSelectedWorkerId}
+                onSendCommand={handleSendCommand}
+              />
+
+              {showOrgPanel && (
+                <OrgPanel
+                  organization={organization}
+                  onClose={() => setShowOrgPanel(false)}
+                />
+              )}
+            </>
+          ) : orgLoaded ? (
+            <div className="flex h-full items-center justify-center">
+              <OrgSetup
+                onClose={() => {}}
+                onCreated={() => {}}
+                inline
+              />
+            </div>
+          ) : (
+            <div className="flex h-full items-center justify-center">
+              <div className="text-lg text-gray-400">Loading...</div>
+            </div>
+          )}
+
+          {hasOrg && showOrgSetup && (
+            <OrgSetup
+              onClose={() => setShowOrgSetup(false)}
+              onCreated={() => setShowOrgSetup(false)}
+            />
+          )}
+        </main>
+      </div>
+
+      {showAddWorker && (
+        <AddWorker onClose={() => setShowAddWorker(false)} />
+      )}
+
+      {showCommandPanel && commandTargetId && (
+        <SendCommand
+          workerId={commandTargetId}
+          workerName={
+            workers?.find((w) => w._id === commandTargetId)?.name ?? "Worker"
+          }
+          onClose={() => {
+            setShowCommandPanel(false);
+            setCommandTargetId(null);
+          }}
+        />
+      )}
+    </div>
+  );
+}
