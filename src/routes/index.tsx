@@ -55,8 +55,11 @@ function DashboardPage() {
 
   if (isLoading) {
     return (
-      <div className="flex h-screen items-center justify-center bg-gray-950">
-        <div className="text-lg text-gray-400">Loading...</div>
+      <div className="flex h-screen items-center justify-center bg-surface-0">
+        <div className="flex flex-col items-center gap-3">
+          <div className="h-8 w-8 rounded-full border-2 border-accent/20 border-t-accent animate-spin" />
+          <span className="text-sm text-white/30 font-body">Loading</span>
+        </div>
       </div>
     );
   }
@@ -76,7 +79,7 @@ function DashboardPage() {
   const orgLoaded = organization !== undefined;
 
   return (
-    <div className="flex h-screen flex-col bg-gray-950 text-white">
+    <div className="flex h-screen flex-col bg-surface-0 text-white">
       <Header
         sidebarOpen={sidebarOpen}
         onToggleSidebar={() => setSidebarOpen(!sidebarOpen)}
@@ -126,7 +129,10 @@ function DashboardPage() {
             </div>
           ) : (
             <div className="flex h-full items-center justify-center">
-              <div className="text-lg text-gray-400">Loading...</div>
+              <div className="flex flex-col items-center gap-3">
+                <div className="h-8 w-8 rounded-full border-2 border-accent/20 border-t-accent animate-spin" />
+                <span className="text-sm text-white/30 font-body">Loading</span>
+              </div>
             </div>
           )}
 

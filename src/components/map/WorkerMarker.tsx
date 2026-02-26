@@ -26,10 +26,10 @@ interface WorkerMarkerProps {
 }
 
 function getBatteryColor(level: number | undefined): string {
-  if (level === undefined) return "#9ca3af";
-  if (level > 50) return "#22c55e";
-  if (level > 20) return "#eab308";
-  return "#ef4444";
+  if (level === undefined) return "#556677";
+  if (level > 50) return "#10b981";
+  if (level > 20) return "#f59e0b";
+  return "#f43f5e";
 }
 
 function createMarkerIcon(
@@ -39,10 +39,10 @@ function createMarkerIcon(
   isCharging: boolean | undefined,
   avatarUrl?: string
 ): L.DivIcon {
-  const color = isOnDuty ? "#3b82f6" : "#6b7280";
+  const color = isOnDuty ? "#00d4ff" : "#556677";
   const borderColor = isSelected ? "#ffffff" : color;
-  const size = isSelected ? 36 : 30;
-  const batteryColor = isCharging ? "#22c55e" : getBatteryColor(batteryLevel);
+  const size = isSelected ? 38 : 32;
+  const batteryColor = isCharging ? "#10b981" : getBatteryColor(batteryLevel);
   const imgSize = size - 6;
 
   const innerContent = avatarUrl
@@ -75,7 +75,7 @@ function createMarkerIcon(
         border-radius: 50%;
         background: ${color};
         border: 3px solid ${borderColor};
-        box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+        box-shadow: 0 2px 12px rgba(0,0,0,0.5)${isSelected ? `, 0 0 20px ${color}40` : ""};
         display: flex;
         align-items: center;
         justify-content: center;
@@ -92,7 +92,7 @@ function createMarkerIcon(
           height: 12px;
           border-radius: 50%;
           background: ${batteryColor};
-          border: 2px solid #1f2937;
+          border: 2px solid #0a1120;
           display: flex;
           align-items: center;
           justify-content: center;
@@ -127,36 +127,38 @@ export function WorkerMarker({
       }}
     >
       <Popup>
-        <div className="min-w-[200px] p-1">
-          <div className="mb-2 flex items-center justify-between">
-            <h3 className="font-semibold text-gray-900">{worker.name}</h3>
+        <div className="min-w-[200px] p-1 font-body">
+          <div className="mb-2.5 flex items-center justify-between">
+            <h3 className="font-display font-bold text-white text-sm">{worker.name}</h3>
             <span
-              className={`rounded-full px-2 py-0.5 text-xs font-medium ${
+              className={`rounded-full px-2 py-0.5 text-[10px] font-medium ${
                 worker.isOnDuty
-                  ? "bg-green-100 text-green-700"
-                  : "bg-gray-100 text-gray-600"
+                  ? "bg-[#10b981]/20 text-[#10b981]"
+                  : "bg-white/10 text-white/50"
               }`}
             >
               {worker.isOnDuty ? "On Duty" : "Off Duty"}
             </span>
           </div>
 
-          <div className="mb-2 space-y-1 text-sm text-gray-600">
+          <div className="mb-3 space-y-1.5 text-xs text-white/60">
             {batteryLevel !== undefined && (
-              <div className="flex items-center gap-1">
-                <span>Battery:</span>
+              <div className="flex items-center gap-1.5">
+                <span className="text-white/40">Battery:</span>
                 <span
                   style={{ color: getBatteryColor(batteryLevel) }}
-                  className="font-medium"
+                  className="font-mono font-medium"
                 >
                   {Math.round(batteryLevel)}%
                 </span>
-                {isCharging && <span className="text-xs">⚡</span>}
+                {isCharging && <span className="text-[10px]">⚡</span>}
               </div>
             )}
-            <div>
+            <div className="text-white/40">
               Updated:{" "}
-              {formatDistanceToNow(new Date(timestamp), { addSuffix: true })}
+              <span className="text-white/60">
+                {formatDistanceToNow(new Date(timestamp), { addSuffix: true })}
+              </span>
             </div>
           </div>
 
@@ -166,13 +168,13 @@ export function WorkerMarker({
                 e.stopPropagation();
                 onSendCommand();
               }}
-              className="rounded-md bg-blue-500 px-3 py-1 text-xs font-medium text-white hover:bg-blue-600 transition-colors"
+              className="rounded-lg bg-[#00d4ff] px-3 py-1.5 text-[11px] font-semibold text-[#040812] hover:bg-[#00d4ff]/90 transition-colors"
             >
               Send Alert
             </button>
             <a
               href={`/workers/${worker._id}`}
-              className="rounded-md bg-gray-100 px-3 py-1 text-xs font-medium text-gray-700 hover:bg-gray-200 transition-colors"
+              className="rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 text-[11px] font-medium text-white/60 hover:bg-white/10 hover:text-white/80 transition-colors"
             >
               Details
             </a>

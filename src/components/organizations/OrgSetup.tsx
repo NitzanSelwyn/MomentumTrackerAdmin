@@ -32,25 +32,27 @@ export function OrgSetup({ onClose, onCreated, inline }: OrgSetupProps) {
   };
 
   const card = (
-    <div className="w-full max-w-md rounded-xl border border-gray-700 bg-gray-900 p-6 shadow-2xl">
-      <div className="flex items-center justify-between mb-4">
-        <div className="flex items-center gap-2">
-          <Building2 className="h-5 w-5 text-blue-400" />
-          <h2 className="text-lg font-semibold text-white">
+    <div className="animate-modal w-full max-w-md rounded-2xl border border-white/[0.08] bg-surface-2 p-6 shadow-2xl shadow-black/40">
+      <div className="flex items-center justify-between mb-5">
+        <div className="flex items-center gap-2.5">
+          <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-accent/10">
+            <Building2 className="h-4.5 w-4.5 text-accent" />
+          </div>
+          <h2 className="font-display text-lg font-bold text-white">
             Set Up Organization
           </h2>
         </div>
         {!inline && (
           <button
             onClick={onClose}
-            className="rounded-md p-1 text-gray-400 hover:bg-gray-800 hover:text-white"
+            className="rounded-lg p-1.5 text-white/30 hover:bg-white/5 hover:text-white/70 transition-all duration-200"
           >
             <X className="h-5 w-5" />
           </button>
         )}
       </div>
 
-      <p className="mb-4 text-sm text-gray-400">
+      <p className="mb-5 text-sm text-white/40 font-body leading-relaxed">
         Create an organization to group your workers. They can join using a QR
         code or join code.
       </p>
@@ -60,7 +62,7 @@ export function OrgSetup({ onClose, onCreated, inline }: OrgSetupProps) {
         value={name}
         onChange={(e) => setName(e.target.value)}
         placeholder="Organization name"
-        className="w-full rounded-lg border border-gray-700 bg-gray-800 px-4 py-2.5 text-white placeholder-gray-500 focus:border-blue-500 focus:outline-none"
+        className="w-full rounded-xl border border-white/[0.08] bg-surface-3 px-4 py-3 text-white placeholder-white/20 font-body focus:border-accent/40 focus:outline-none input-glow transition-all duration-200"
         autoFocus
         onKeyDown={(e) => {
           if (e.key === "Enter") handleCreate();
@@ -68,14 +70,14 @@ export function OrgSetup({ onClose, onCreated, inline }: OrgSetupProps) {
       />
 
       {error && (
-        <p className="mt-2 text-sm text-red-400">{error}</p>
+        <p className="mt-2.5 text-sm text-rose-400 font-body">{error}</p>
       )}
 
-      <div className="mt-4 flex justify-end gap-3">
+      <div className="mt-5 flex justify-end gap-3">
         {!inline && (
           <button
             onClick={onClose}
-            className="rounded-lg px-4 py-2 text-sm text-gray-400 hover:bg-gray-800"
+            className="rounded-lg px-4 py-2 text-sm text-white/40 hover:text-white/70 font-body transition-colors"
           >
             Cancel
           </button>
@@ -83,7 +85,7 @@ export function OrgSetup({ onClose, onCreated, inline }: OrgSetupProps) {
         <button
           onClick={handleCreate}
           disabled={!name.trim() || isCreating}
-          className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="rounded-lg bg-accent px-5 py-2.5 text-sm font-semibold text-surface-0 hover:bg-accent/90 disabled:opacity-40 disabled:cursor-not-allowed transition-all duration-200 glow-accent-sm"
         >
           {isCreating ? "Creating..." : "Create Organization"}
         </button>
@@ -96,7 +98,7 @@ export function OrgSetup({ onClose, onCreated, inline }: OrgSetupProps) {
   }
 
   return (
-    <div className="absolute inset-0 z-10 flex items-center justify-center bg-black/40">
+    <div className="absolute inset-0 z-10 flex items-center justify-center bg-black/40 backdrop-blur-sm animate-fade">
       {card}
     </div>
   );

@@ -26,8 +26,11 @@ function SettingsPage() {
 
   if (isLoading) {
     return (
-      <div className="flex h-screen items-center justify-center bg-gray-950">
-        <div className="text-lg text-gray-400">Loading...</div>
+      <div className="flex h-screen items-center justify-center bg-surface-0">
+        <div className="flex flex-col items-center gap-3">
+          <div className="h-8 w-8 rounded-full border-2 border-accent/20 border-t-accent animate-spin" />
+          <span className="text-sm text-white/30 font-body">Loading</span>
+        </div>
       </div>
     );
   }
@@ -35,30 +38,32 @@ function SettingsPage() {
   if (!isAuthenticated) return null;
 
   return (
-    <div className="flex h-screen flex-col bg-gray-950 text-white">
+    <div className="flex h-screen flex-col bg-surface-0 text-white">
       {/* Header */}
-      <header className="flex h-14 shrink-0 items-center gap-3 border-b border-gray-800 bg-gray-900 px-4">
+      <header className="gradient-border-b relative flex h-14 shrink-0 items-center gap-3 bg-surface-1/90 backdrop-blur-xl px-5">
         <button
           onClick={() => navigate({ to: "/" })}
-          className="rounded-md p-1.5 text-gray-400 hover:bg-gray-800 hover:text-white transition-colors"
+          className="rounded-lg p-2 text-white/40 hover:bg-white/5 hover:text-white/80 transition-all duration-200"
         >
           <ArrowLeft className="h-5 w-5" />
         </button>
-        <h1 className="text-lg font-semibold">Settings</h1>
+        <h1 className="font-display text-lg font-bold">Settings</h1>
       </header>
 
       {/* Content */}
       <div className="flex-1 overflow-y-auto p-6">
-        <div className="mx-auto max-w-lg">
+        <div className="mx-auto max-w-lg animate-in">
           {organization === undefined ? (
-            <div className="text-center text-gray-400 py-12">Loading...</div>
+            <div className="flex justify-center py-16">
+              <div className="h-8 w-8 rounded-full border-2 border-accent/20 border-t-accent animate-spin" />
+            </div>
           ) : organization === null ? (
-            <div className="text-center text-gray-400 py-12">
+            <div className="text-center text-white/30 py-16 font-body">
               No organization found. Create or join one first.
             </div>
           ) : (
-            <div className="rounded-xl border border-gray-700 bg-gray-900 p-6">
-              <h2 className="text-base font-semibold text-white mb-4">
+            <div className="rounded-2xl border border-white/[0.06] bg-surface-2 p-6">
+              <h2 className="font-display text-base font-bold text-white mb-5">
                 {organization.name}
               </h2>
               <OrgSettings

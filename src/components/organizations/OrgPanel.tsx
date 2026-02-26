@@ -25,28 +25,28 @@ export function OrgPanel({ organization, onClose }: OrgPanelProps) {
   };
 
   return (
-    <div className="absolute inset-0 z-10 flex items-center justify-center bg-black/40">
-      <div className="w-full max-w-lg rounded-xl border border-gray-700 bg-gray-900 p-6 shadow-2xl">
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-lg font-semibold text-white">
+    <div className="absolute inset-0 z-10 flex items-center justify-center bg-black/40 backdrop-blur-sm animate-fade">
+      <div className="animate-modal w-full max-w-lg rounded-2xl border border-white/[0.08] bg-surface-2 p-6 shadow-2xl shadow-black/40">
+        <div className="flex items-center justify-between mb-5">
+          <h2 className="font-display text-lg font-bold text-white">
             {organization.name}
           </h2>
           <button
             onClick={onClose}
-            className="rounded-md p-1 text-gray-400 hover:bg-gray-800 hover:text-white"
+            className="rounded-lg p-1.5 text-white/30 hover:bg-white/5 hover:text-white/70 transition-all duration-200"
           >
             <X className="h-5 w-5" />
           </button>
         </div>
 
         {/* Tabs */}
-        <div className="mb-4 flex gap-1 rounded-lg bg-gray-800 p-1">
+        <div className="mb-5 flex gap-1 rounded-xl bg-surface-3 p-1">
           <button
             onClick={() => setTab("qr")}
-            className={`flex flex-1 items-center justify-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors ${
+            className={`flex flex-1 items-center justify-center gap-2 rounded-lg px-3 py-2 text-sm font-medium font-body transition-all duration-200 ${
               tab === "qr"
-                ? "bg-gray-700 text-white"
-                : "text-gray-400 hover:text-white"
+                ? "bg-surface-4 text-white shadow-sm"
+                : "text-white/40 hover:text-white/60"
             }`}
           >
             <QrCode className="h-4 w-4" />
@@ -54,10 +54,10 @@ export function OrgPanel({ organization, onClose }: OrgPanelProps) {
           </button>
           <button
             onClick={() => setTab("members")}
-            className={`flex flex-1 items-center justify-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors ${
+            className={`flex flex-1 items-center justify-center gap-2 rounded-lg px-3 py-2 text-sm font-medium font-body transition-all duration-200 ${
               tab === "members"
-                ? "bg-gray-700 text-white"
-                : "text-gray-400 hover:text-white"
+                ? "bg-surface-4 text-white shadow-sm"
+                : "text-white/40 hover:text-white/60"
             }`}
           >
             <Users className="h-4 w-4" />
@@ -76,11 +76,11 @@ export function OrgPanel({ organization, onClose }: OrgPanelProps) {
         {tab === "members" && (
           <div className="max-h-80 overflow-y-auto">
             {!members ? (
-              <p className="text-center text-sm text-gray-500 py-4">
-                Loading...
-              </p>
+              <div className="flex justify-center py-8">
+                <div className="h-6 w-6 rounded-full border-2 border-accent/20 border-t-accent animate-spin" />
+              </div>
             ) : members.length === 0 ? (
-              <p className="text-center text-sm text-gray-500 py-4">
+              <p className="text-center text-sm text-white/25 py-8 font-body">
                 No members yet
               </p>
             ) : (
@@ -88,20 +88,27 @@ export function OrgPanel({ organization, onClose }: OrgPanelProps) {
                 {members.map((member) => (
                   <div
                     key={member._id}
-                    className="flex items-center justify-between rounded-lg px-3 py-2.5 hover:bg-gray-800"
+                    className="flex items-center justify-between rounded-xl px-3 py-3 hover:bg-white/[0.03] transition-colors"
                   >
-                    <div>
-                      <p className="text-sm font-medium text-white">
-                        {member.name}
-                      </p>
-                      <p className="text-xs text-gray-500">{member.email}</p>
+                    <div className="flex items-center gap-3">
+                      <div className="flex h-8 w-8 items-center justify-center rounded-full bg-surface-3 ring-1 ring-white/[0.06]">
+                        <span className="text-xs font-bold font-display text-white/50">
+                          {member.name.charAt(0).toUpperCase()}
+                        </span>
+                      </div>
+                      <div>
+                        <p className="text-sm font-medium text-white font-body">
+                          {member.name}
+                        </p>
+                        <p className="text-xs text-white/30 font-body">{member.email}</p>
+                      </div>
                     </div>
                     <div className="flex items-center gap-2">
                       <span
-                        className={`rounded-full px-2 py-0.5 text-[10px] font-medium ${
+                        className={`rounded-full px-2 py-0.5 text-[10px] font-medium font-body ${
                           member.isOnDuty
-                            ? "bg-green-500/20 text-green-400"
-                            : "bg-gray-700 text-gray-400"
+                            ? "bg-neon/15 text-neon"
+                            : "bg-white/5 text-white/30"
                         }`}
                       >
                         {member.isOnDuty ? "On Duty" : "Off"}
@@ -111,7 +118,7 @@ export function OrgPanel({ organization, onClose }: OrgPanelProps) {
                           onClick={() =>
                             handleRemove(member._id, member.name)
                           }
-                          className="rounded-md p-1 text-gray-500 hover:bg-gray-700 hover:text-red-400"
+                          className="rounded-lg p-1.5 text-white/20 hover:bg-rose-500/10 hover:text-rose-400 transition-all duration-200"
                           title="Remove from organization"
                         >
                           <UserMinus className="h-4 w-4" />

@@ -6,7 +6,7 @@ interface SidebarProps {
 
 export function Sidebar({ children }: SidebarProps) {
   return (
-    <aside className="flex w-80 shrink-0 flex-col border-r border-gray-800 bg-gray-900">
+    <aside className="gradient-border-r flex w-80 shrink-0 flex-col bg-surface-1">
       {children}
     </aside>
   );

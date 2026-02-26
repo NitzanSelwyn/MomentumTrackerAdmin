@@ -109,8 +109,8 @@ export function LiveMap({
         zoomControl={true}
       >
         <TileLayer
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          attribution='&copy; <a href="https://carto.com/">CARTO</a>'
+          url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
         />
 
         <FitBounds workers={workers} />
@@ -133,7 +133,7 @@ export function LiveMap({
       <div className="absolute right-3 top-3 z-[1000] flex flex-col gap-2">
         <button
           onClick={handleFitAll}
-          className="rounded-lg bg-gray-900/90 p-2 text-gray-300 shadow-lg backdrop-blur-sm hover:bg-gray-800 hover:text-white transition-colors"
+          className="glass-strong rounded-xl p-2.5 text-white/50 shadow-lg hover:bg-white/5 hover:text-accent transition-all duration-200"
           title="Fit all workers"
         >
           <Maximize2 className="h-4 w-4" />
@@ -141,10 +141,13 @@ export function LiveMap({
       </div>
 
       {/* Worker count badge */}
-      <div className="absolute bottom-4 left-4 z-[1000] rounded-lg bg-gray-900/90 px-3 py-1.5 text-sm text-gray-300 shadow-lg backdrop-blur-sm">
-        {workers.filter((w) => w.currentLocation).length} worker
-        {workers.filter((w) => w.currentLocation).length !== 1 ? "s" : ""} on
-        map
+      <div className="absolute bottom-4 left-4 z-[1000] glass-strong rounded-xl px-3.5 py-2 shadow-lg">
+        <span className="text-sm text-white/50 font-body">
+          <span className="font-mono font-medium text-accent">
+            {workers.filter((w) => w.currentLocation).length}
+          </span>{" "}
+          worker{workers.filter((w) => w.currentLocation).length !== 1 ? "s" : ""} on map
+        </span>
       </div>
     </div>
   );

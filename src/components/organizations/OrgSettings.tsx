@@ -62,18 +62,18 @@ export function OrgSettings({
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center gap-2 text-gray-400">
-        <Settings className="h-4 w-4" />
-        <span className="text-sm font-medium">Tracking Intervals</span>
+      <div className="flex items-center gap-2 text-white/40">
+        <Settings className="h-4 w-4 text-accent/50" />
+        <span className="text-sm font-medium font-display tracking-wide">Tracking Intervals</span>
       </div>
 
       {/* Location Pull Interval */}
       <div>
-        <div className="flex items-center justify-between mb-2">
-          <label className="text-sm text-gray-300">
+        <div className="flex items-center justify-between mb-3">
+          <label className="text-sm text-white/50 font-body">
             Location Pull Interval
           </label>
-          <span className="text-sm font-mono font-medium text-white">
+          <span className="font-mono text-sm font-medium text-accent">
             {locationMs / 1000}s
           </span>
         </div>
@@ -84,9 +84,9 @@ export function OrgSettings({
           step={STEP}
           value={locationMs}
           onChange={(e) => handleLocationChange(Number(e.target.value))}
-          className="w-full accent-blue-500"
+          className="w-full"
         />
-        <div className="flex justify-between text-[10px] text-gray-500 mt-1">
+        <div className="flex justify-between text-[10px] text-white/20 mt-1.5 font-mono">
           <span>5s</span>
           <span>60s</span>
         </div>
@@ -94,11 +94,11 @@ export function OrgSettings({
 
       {/* History Save Interval */}
       <div>
-        <div className="flex items-center justify-between mb-2">
-          <label className="text-sm text-gray-300">
+        <div className="flex items-center justify-between mb-3">
+          <label className="text-sm text-white/50 font-body">
             History Save Interval
           </label>
-          <span className="text-sm font-mono font-medium text-white">
+          <span className="font-mono text-sm font-medium text-accent">
             {historyMs / 1000}s
           </span>
         </div>
@@ -109,15 +109,15 @@ export function OrgSettings({
           step={STEP}
           value={historyMs}
           onChange={(e) => handleHistoryChange(Number(e.target.value))}
-          className="w-full accent-blue-500"
+          className="w-full"
         />
-        <div className="flex justify-between text-[10px] text-gray-500 mt-1">
+        <div className="flex justify-between text-[10px] text-white/20 mt-1.5 font-mono">
           <span>5s</span>
           <span>60s</span>
         </div>
       </div>
 
-      <p className="text-xs text-gray-500">
+      <p className="text-xs text-white/25 font-body leading-relaxed">
         Changes are saved automatically. Workers will pick up new intervals on
         their next shift start.
       </p>

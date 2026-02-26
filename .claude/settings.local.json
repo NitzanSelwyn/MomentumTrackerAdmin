@@ -15,7 +15,8 @@
       "Bash(npm install:*)",
       "Bash(copy:*)",
       "Bash(npx expo install:*)",
-      "Bash(npx tsr generate:*)"
+      "Bash(npx tsr generate:*)",
+      "mcp__ide__getDiagnostics"
     ]
   }
 }

@@ -20,7 +20,7 @@ export function OrgQRCode({ organizationId, joinCode }: OrgQRCodeProps) {
     QRCode.toDataURL(joinCode, {
       width: 200,
       margin: 2,
-      color: { dark: "#ffffff", light: "#00000000" },
+      color: { dark: "#00d4ff", light: "#00000000" },
     }).then(setQrDataUrl);
   }, [joinCode]);
 
@@ -40,40 +40,42 @@ export function OrgQRCode({ organizationId, joinCode }: OrgQRCodeProps) {
   };
 
   return (
-    <div className="flex flex-col items-center gap-4">
+    <div className="flex flex-col items-center gap-5">
       {qrDataUrl && (
-        <img
-          src={qrDataUrl}
-          alt="QR Code"
-          className="h-48 w-48 rounded-lg"
-        />
+        <div className="rounded-2xl border border-white/[0.06] bg-surface-3 p-4">
+          <img
+            src={qrDataUrl}
+            alt="QR Code"
+            className="h-48 w-48"
+          />
+        </div>
       )}
 
       <div className="flex items-center gap-3">
-        <span className="font-mono text-3xl font-bold tracking-widest text-white">
+        <span className="font-mono text-3xl font-bold tracking-[0.25em] text-white">
           {joinCode}
         </span>
         <button
           onClick={handleCopy}
-          className="rounded-md p-2 text-gray-400 hover:bg-gray-800 hover:text-white"
+          className="rounded-lg p-2 text-white/30 hover:bg-white/5 hover:text-accent transition-all duration-200"
           title="Copy code"
         >
           {copied ? (
-            <Check className="h-5 w-5 text-green-400" />
+            <Check className="h-5 w-5 text-neon" />
           ) : (
             <Copy className="h-5 w-5" />
           )}
         </button>
       </div>
 
-      <p className="text-sm text-gray-500">
+      <p className="text-sm text-white/30 font-body">
         Workers scan this QR code or enter the code to join
       </p>
 
       <button
         onClick={handleRegenerate}
         disabled={isRegenerating}
-        className="flex items-center gap-2 rounded-lg border border-gray-700 px-3 py-1.5 text-xs text-gray-400 hover:bg-gray-800 hover:text-white disabled:opacity-50"
+        className="flex items-center gap-2 rounded-xl border border-white/[0.08] px-3.5 py-2 text-xs text-white/40 hover:bg-white/[0.03] hover:text-white/60 disabled:opacity-40 font-body transition-all duration-200"
       >
         <RefreshCw
           className={`h-3.5 w-3.5 ${isRegenerating ? "animate-spin" : ""}`}

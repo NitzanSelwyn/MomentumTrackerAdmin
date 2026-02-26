@@ -10,7 +10,14 @@ function RootComponent() {
     <ClerkProvider publishableKey={CLERK_PUBLISHABLE_KEY}>
       <ConvexProviderWithClerk client={convex} useAuth={useAuth}>
         <Outlet />
-        <Toaster position="bottom-right" richColors />
+        <Toaster
+          position="bottom-right"
+          richColors
+          theme="dark"
+          toastOptions={{
+            className: "font-body",
+          }}
+        />
       </ConvexProviderWithClerk>
     </ClerkProvider>
   );

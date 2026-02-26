@@ -63,10 +63,10 @@ interface WorkerDetailProps {
 }
 
 function getBatteryColor(level: number | undefined): string {
-  if (level === undefined) return "text-gray-500";
-  if (level > 50) return "text-green-400";
-  if (level > 20) return "text-yellow-400";
-  return "text-red-400";
+  if (level === undefined) return "text-white/30";
+  if (level > 50) return "text-neon";
+  if (level > 20) return "text-amber-400";
+  return "text-rose-400";
 }
 
 export function WorkerDetail({
@@ -116,12 +116,12 @@ export function WorkerDetail({
   return (
     <div className="mx-auto max-w-4xl space-y-6">
       {/* Worker Header */}
-      <div className="rounded-xl border border-gray-800 bg-gray-900 p-6">
+      <div className="animate-in rounded-2xl border border-white/[0.06] bg-surface-2 p-6">
         <div className="flex items-start justify-between">
-          <div className="flex items-start gap-4">
+          <div className="flex items-start gap-5">
             {/* Avatar */}
             <div
-              className="group relative h-16 w-16 shrink-0 cursor-pointer overflow-hidden rounded-full bg-gray-700"
+              className="group relative h-16 w-16 shrink-0 cursor-pointer overflow-hidden rounded-full ring-2 ring-white/[0.08] hover:ring-accent/30 transition-all duration-300"
               onClick={() => fileInputRef.current?.click()}
             >
               {worker.avatarUrl ? (
@@ -131,7 +131,7 @@ export function WorkerDetail({
                   className="h-full w-full object-cover"
                 />
               ) : (
-                <div className="flex h-full w-full items-center justify-center text-xl font-bold text-gray-300">
+                <div className={`flex h-full w-full items-center justify-center text-xl font-bold font-display ${worker.isOnDuty ? "bg-accent/15 text-accent" : "bg-surface-3 text-white/40"}`}>
                   {worker.name.charAt(0).toUpperCase()}
                 </div>
               )}
@@ -152,73 +152,73 @@ export function WorkerDetail({
             </div>
 
             <div>
-            {isEditingName ? (
-              <div className="flex items-center gap-2">
-                <input
-                  type="text"
-                  value={editedName}
-                  onChange={(e) => setEditedName(e.target.value)}
-                  className="rounded-md border border-gray-600 bg-gray-800 px-3 py-1 text-2xl font-bold text-white focus:border-blue-500 focus:outline-none"
-                  autoFocus
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter") handleSaveName();
-                    if (e.key === "Escape") {
+              {isEditingName ? (
+                <div className="flex items-center gap-2">
+                  <input
+                    type="text"
+                    value={editedName}
+                    onChange={(e) => setEditedName(e.target.value)}
+                    className="rounded-lg border border-white/[0.08] bg-surface-3 px-3 py-1 font-display text-2xl font-bold text-white focus:border-accent/40 focus:outline-none input-glow"
+                    autoFocus
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") handleSaveName();
+                      if (e.key === "Escape") {
+                        setEditedName(worker.name);
+                        setIsEditingName(false);
+                      }
+                    }}
+                  />
+                  <button
+                    onClick={handleSaveName}
+                    className="rounded-lg p-1.5 text-neon hover:bg-neon/10 transition-colors"
+                  >
+                    <Check className="h-5 w-5" />
+                  </button>
+                  <button
+                    onClick={() => {
                       setEditedName(worker.name);
                       setIsEditingName(false);
-                    }
-                  }}
-                />
-                <button
-                  onClick={handleSaveName}
-                  className="rounded-md p-1.5 text-green-400 hover:bg-gray-800"
+                    }}
+                    className="rounded-lg p-1.5 text-white/40 hover:bg-white/5 transition-colors"
+                  >
+                    <X className="h-5 w-5" />
+                  </button>
+                </div>
+              ) : (
+                <div className="flex items-center gap-2">
+                  <h1 className="font-display text-2xl font-bold">{worker.name}</h1>
+                  <button
+                    onClick={() => {
+                      setEditedName(worker.name);
+                      setIsEditingName(true);
+                    }}
+                    className="rounded-lg p-1 text-white/20 hover:bg-white/5 hover:text-white/50 transition-colors"
+                  >
+                    <Pencil className="h-4 w-4" />
+                  </button>
+                </div>
+              )}
+              <p className="mt-1 text-sm text-white/40 font-body">{worker.email}</p>
+              <div className="mt-3 flex items-center gap-2.5">
+                <span
+                  className={`rounded-full px-3 py-1 text-xs font-medium font-body ${
+                    worker.isOnDuty
+                      ? "bg-neon/15 text-neon"
+                      : "bg-white/5 text-white/40"
+                  }`}
                 >
-                  <Check className="h-5 w-5" />
-                </button>
-                <button
-                  onClick={() => {
-                    setEditedName(worker.name);
-                    setIsEditingName(false);
-                  }}
-                  className="rounded-md p-1.5 text-gray-400 hover:bg-gray-800"
-                >
-                  <X className="h-5 w-5" />
-                </button>
+                  {worker.isOnDuty ? "On Duty" : "Off Duty"}
+                </span>
+                <span className="rounded-full bg-surface-3 px-3 py-1 text-xs text-white/40 font-body">
+                  {worker.role}
+                </span>
               </div>
-            ) : (
-              <div className="flex items-center gap-2">
-                <h1 className="text-2xl font-bold">{worker.name}</h1>
-                <button
-                  onClick={() => {
-                    setEditedName(worker.name);
-                    setIsEditingName(true);
-                  }}
-                  className="rounded-md p-1 text-gray-500 hover:bg-gray-800 hover:text-gray-300"
-                >
-                  <Pencil className="h-4 w-4" />
-                </button>
-              </div>
-            )}
-            <p className="mt-1 text-sm text-gray-400">{worker.email}</p>
-            <div className="mt-3 flex items-center gap-3">
-              <span
-                className={`rounded-full px-3 py-1 text-xs font-medium ${
-                  worker.isOnDuty
-                    ? "bg-green-500/20 text-green-400"
-                    : "bg-gray-700 text-gray-400"
-                }`}
-              >
-                {worker.isOnDuty ? "On Duty" : "Off Duty"}
-              </span>
-              <span className="rounded-full bg-gray-800 px-3 py-1 text-xs text-gray-400">
-                {worker.role}
-              </span>
             </div>
-          </div>
           </div>
 
           <button
             onClick={onSendCommand}
-            className="flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 transition-colors"
+            className="flex items-center gap-2 rounded-xl bg-accent px-5 py-2.5 text-sm font-semibold text-surface-0 hover:bg-accent/90 transition-all duration-200 glow-accent-sm"
           >
             <Send className="h-4 w-4" />
             Send Alert
@@ -229,22 +229,22 @@ export function WorkerDetail({
       {/* Stats Grid */}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
         {/* Location */}
-        <div className="rounded-xl border border-gray-800 bg-gray-900 p-4">
-          <div className="flex items-center gap-2 text-sm text-gray-400">
-            <MapPin className="h-4 w-4" />
+        <div className="animate-in stagger-1 rounded-2xl border border-white/[0.06] bg-surface-2 p-5">
+          <div className="flex items-center gap-2 text-sm text-white/40 font-body">
+            <MapPin className="h-4 w-4 text-accent/60" />
             Current Location
           </div>
           {loc ? (
-            <div className="mt-2">
+            <div className="mt-3">
               <p className="text-sm font-mono text-white">
                 {loc.latitude.toFixed(6)}, {loc.longitude.toFixed(6)}
               </p>
               {loc.accuracy && (
-                <p className="mt-1 text-xs text-gray-500">
+                <p className="mt-1.5 text-xs text-white/25 font-mono">
                   ±{Math.round(loc.accuracy)}m accuracy
                 </p>
               )}
-              <p className="mt-1 text-xs text-gray-500">
+              <p className="mt-1.5 text-xs text-white/25 font-body">
                 Updated{" "}
                 {formatDistanceToNow(new Date(loc.timestamp), {
                   addSuffix: true,
@@ -252,52 +252,54 @@ export function WorkerDetail({
               </p>
             </div>
           ) : (
-            <p className="mt-2 text-sm text-gray-600">No location data</p>
+            <p className="mt-3 text-sm text-white/20 font-body">No location data</p>
           )}
         </div>
 
         {/* Battery */}
-        <div className="rounded-xl border border-gray-800 bg-gray-900 p-4">
-          <div className="flex items-center gap-2 text-sm text-gray-400">
+        <div className="animate-in stagger-2 rounded-2xl border border-white/[0.06] bg-surface-2 p-5">
+          <div className="flex items-center gap-2 text-sm text-white/40 font-body">
             {loc?.isCharging ? (
-              <BatteryCharging className="h-4 w-4" />
+              <BatteryCharging className="h-4 w-4 text-neon/60" />
             ) : (
-              <Battery className="h-4 w-4" />
+              <Battery className="h-4 w-4 text-white/30" />
             )}
             Battery
           </div>
           {loc?.batteryLevel !== undefined ? (
-            <div className="mt-2">
+            <div className="mt-3">
               <p
-                className={`text-2xl font-bold ${getBatteryColor(loc.batteryLevel)}`}
+                className={`font-mono text-3xl font-bold ${getBatteryColor(loc.batteryLevel)}`}
               >
                 {Math.round(loc.batteryLevel)}%
               </p>
               {loc.isCharging && (
-                <p className="mt-1 text-xs text-green-400">Charging</p>
+                <p className="mt-1.5 text-xs text-neon font-body">Charging</p>
               )}
             </div>
           ) : (
-            <p className="mt-2 text-sm text-gray-600">No battery data</p>
+            <p className="mt-3 text-sm text-white/20 font-body">No battery data</p>
           )}
         </div>
 
         {/* Activity */}
-        <div className="rounded-xl border border-gray-800 bg-gray-900 p-4">
-          <div className="flex items-center gap-2 text-sm text-gray-400">
-            <Clock className="h-4 w-4" />
+        <div className="animate-in stagger-3 rounded-2xl border border-white/[0.06] bg-surface-2 p-5">
+          <div className="flex items-center gap-2 text-sm text-white/40 font-body">
+            <Clock className="h-4 w-4 text-white/30" />
             Activity
           </div>
-          <div className="mt-2">
-            <p className="text-sm text-white">
+          <div className="mt-3">
+            <p className="text-sm text-white font-body">
               Last seen:{" "}
-              {worker.lastSeen
-                ? formatDistanceToNow(new Date(worker.lastSeen), {
-                    addSuffix: true,
-                  })
-                : "Never"}
+              <span className="text-white/70">
+                {worker.lastSeen
+                  ? formatDistanceToNow(new Date(worker.lastSeen), {
+                      addSuffix: true,
+                    })
+                  : "Never"}
+              </span>
             </p>
-            <p className="mt-1 text-xs text-gray-500">
+            <p className="mt-1.5 text-xs text-white/25 font-body">
               Joined {format(new Date(worker.createdAt), "MMM d, yyyy")}
             </p>
           </div>
@@ -306,27 +308,27 @@ export function WorkerDetail({
 
       {/* Location History */}
       {locationHistory.length > 0 && (
-        <div className="rounded-xl border border-gray-800 bg-gray-900 p-6">
-          <h2 className="mb-4 text-lg font-semibold">Location History</h2>
+        <div className="animate-in rounded-2xl border border-white/[0.06] bg-surface-2 p-6">
+          <h2 className="mb-4 font-display text-lg font-bold">Location History</h2>
           <div className="max-h-60 overflow-y-auto">
             <table className="w-full text-sm">
-              <thead className="text-left text-xs text-gray-500">
+              <thead className="text-left text-xs text-white/30 font-body">
                 <tr>
-                  <th className="pb-2">Time</th>
-                  <th className="pb-2">Location</th>
-                  <th className="pb-2">Battery</th>
+                  <th className="pb-3 font-medium">Time</th>
+                  <th className="pb-3 font-medium">Location</th>
+                  <th className="pb-3 font-medium">Battery</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-800/50">
+              <tbody className="divide-y divide-white/[0.03]">
                 {locationHistory.map((loc) => (
-                  <tr key={loc._id} className="text-gray-300">
-                    <td className="py-2">
+                  <tr key={loc._id} className="text-white/60">
+                    <td className="py-2.5 font-mono text-xs">
                       {format(new Date(loc.timestamp), "HH:mm:ss")}
                     </td>
-                    <td className="py-2 font-mono text-xs">
+                    <td className="py-2.5 font-mono text-xs text-white/40">
                       {loc.latitude.toFixed(4)}, {loc.longitude.toFixed(4)}
                     </td>
-                    <td className="py-2">
+                    <td className="py-2.5 font-mono text-xs">
                       {loc.batteryLevel !== undefined
                         ? `${Math.round(loc.batteryLevel)}%`
                         : "-"}
@@ -340,8 +342,8 @@ export function WorkerDetail({
       )}
 
       {/* Command History */}
-      <div className="rounded-xl border border-gray-800 bg-gray-900 p-6">
-        <h2 className="mb-4 text-lg font-semibold">Command History</h2>
+      <div className="animate-in rounded-2xl border border-white/[0.06] bg-surface-2 p-6">
+        <h2 className="mb-4 font-display text-lg font-bold">Command History</h2>
         <CommandHistory commands={commandHistory} />
       </div>
     </div>

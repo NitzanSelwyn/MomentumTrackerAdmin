@@ -65,37 +65,35 @@ export function WorkerList({
   return (
     <div className="flex h-full flex-col">
       {/* Search and filters */}
-      <div className="border-b border-gray-800 p-3">
-        <div className="relative mb-2">
-          <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-gray-500" />
+      <div className="border-b border-white/[0.04] p-3 space-y-2.5">
+        <div className="relative">
+          <Search className="absolute left-3 top-2.5 h-4 w-4 text-white/25" />
           <input
             type="text"
             placeholder="Search workers..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full rounded-lg bg-gray-800 py-2 pl-9 pr-3 text-sm text-white placeholder:text-gray-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+            className="w-full rounded-lg border border-white/[0.06] bg-surface-2 py-2 pl-9 pr-3 text-sm text-white placeholder:text-white/25 font-body focus:outline-none focus:border-accent/40 input-glow transition-all duration-200"
           />
         </div>
 
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <select
-              value={sortBy}
-              onChange={(e) => setSortBy(e.target.value as SortBy)}
-              className="rounded-md bg-gray-800 px-2 py-1 text-xs text-gray-300 focus:outline-none focus:ring-1 focus:ring-blue-500"
-            >
-              <option value="name">Sort: Name</option>
-              <option value="lastSeen">Sort: Last Seen</option>
-              <option value="battery">Sort: Battery</option>
-            </select>
-          </div>
+          <select
+            value={sortBy}
+            onChange={(e) => setSortBy(e.target.value as SortBy)}
+            className="rounded-lg border border-white/[0.06] bg-surface-2 px-2.5 py-1 text-xs text-white/50 font-body focus:outline-none focus:border-accent/40 transition-colors"
+          >
+            <option value="name">Sort: Name</option>
+            <option value="lastSeen">Sort: Last Seen</option>
+            <option value="battery">Sort: Battery</option>
+          </select>
 
           <button
             onClick={onToggleOnDuty}
-            className={`flex items-center gap-1 rounded-md px-2 py-1 text-xs transition-colors ${
+            className={`flex items-center gap-1.5 rounded-lg px-2.5 py-1 text-xs font-medium transition-all duration-200 ${
               showOnlyOnDuty
-                ? "bg-blue-500/20 text-blue-400"
-                : "bg-gray-800 text-gray-400 hover:text-gray-300"
+                ? "bg-accent/15 text-accent border border-accent/20"
+                : "border border-white/[0.06] bg-surface-2 text-white/40 hover:text-white/60"
             }`}
           >
             <Filter className="h-3 w-3" />
@@ -107,11 +105,13 @@ export function WorkerList({
       {/* Worker list */}
       <div className="flex-1 overflow-y-auto">
         {sorted.length === 0 ? (
-          <div className="p-6 text-center text-sm text-gray-500">
-            {search ? "No workers match your search" : "No workers found"}
+          <div className="p-8 text-center">
+            <p className="text-sm text-white/30 font-body">
+              {search ? "No workers match your search" : "No workers found"}
+            </p>
           </div>
         ) : (
-          <div className="divide-y divide-gray-800/50">
+          <div className="divide-y divide-white/[0.03]">
             {sorted.map((worker) => (
               <WorkerCard
                 key={worker._id}
@@ -126,14 +126,16 @@ export function WorkerList({
       </div>
 
       {/* Status bar */}
-      <div className="flex items-center justify-between border-t border-gray-800 px-3 py-2">
-        <span className="text-xs text-gray-500">
+      <div className="flex items-center justify-between border-t border-white/[0.04] px-3 py-2.5">
+        <span className="text-xs text-white/30 font-body">
           {workers.length} worker{workers.length !== 1 ? "s" : ""} &middot;{" "}
-          {workers.filter((w) => w.isOnDuty).length} on duty
+          <span className="text-neon/70">
+            {workers.filter((w) => w.isOnDuty).length} on duty
+          </span>
         </span>
         <button
           onClick={onAddWorker}
-          className="flex items-center gap-1 rounded-md bg-blue-600 px-2.5 py-1 text-xs font-medium text-white hover:bg-blue-700 transition-colors"
+          className="flex items-center gap-1.5 rounded-lg bg-accent px-3 py-1.5 text-xs font-semibold text-surface-0 hover:bg-accent/90 transition-all duration-200 glow-accent-sm"
         >
           <UserPlus className="h-3 w-3" />
           Add

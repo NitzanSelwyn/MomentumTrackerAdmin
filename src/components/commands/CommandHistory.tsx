@@ -28,11 +28,11 @@ interface CommandHistoryProps {
 function getStatusIcon(status: string) {
   switch (status) {
     case "pending":
-      return <Clock className="h-4 w-4 text-yellow-400" />;
+      return <Clock className="h-4 w-4 text-amber-400" />;
     case "delivered":
-      return <Send className="h-4 w-4 text-blue-400" />;
+      return <Send className="h-4 w-4 text-accent" />;
     case "acknowledged":
-      return <CheckCircle2 className="h-4 w-4 text-green-400" />;
+      return <CheckCircle2 className="h-4 w-4 text-neon" />;
     default:
       return null;
   }
@@ -67,42 +67,42 @@ function getTypeIcon(type: string) {
 export function CommandHistory({ commands }: CommandHistoryProps) {
   if (commands.length === 0) {
     return (
-      <p className="text-sm text-gray-500">No commands sent to this worker</p>
+      <p className="text-sm text-white/25 font-body">No commands sent to this worker</p>
     );
   }
 
   return (
-    <div className="space-y-3">
+    <div className="space-y-2.5">
       {commands.map((cmd) => (
         <div
           key={cmd._id}
-          className="flex items-start gap-3 rounded-lg border border-gray-800 bg-gray-800/30 p-3"
+          className="flex items-start gap-3 rounded-xl border border-white/[0.04] bg-white/[0.02] p-3.5 transition-colors hover:bg-white/[0.03]"
         >
-          <div className="mt-0.5 text-gray-400">{getTypeIcon(cmd.type)}</div>
+          <div className="mt-0.5 text-white/30">{getTypeIcon(cmd.type)}</div>
 
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2">
-              <span className="text-sm font-medium text-white capitalize">
+              <span className="text-sm font-medium text-white capitalize font-body">
                 {cmd.type.replace(/_/g, " ")}
               </span>
-              <span className="text-xs text-gray-500">
+              <span className="text-xs text-white/25 font-mono">
                 ({cmd.soundType})
               </span>
             </div>
 
             {cmd.message && (
-              <p className="mt-1 text-sm text-gray-300 line-clamp-2">
+              <p className="mt-1 text-sm text-white/50 line-clamp-2 font-body">
                 {cmd.message}
               </p>
             )}
 
-            <div className="mt-2 flex items-center gap-3 text-xs text-gray-500">
+            <div className="mt-2 flex items-center gap-3 text-xs text-white/25 font-body">
               <span>
                 {formatDistanceToNow(new Date(cmd.createdAt), {
                   addSuffix: true,
                 })}
               </span>
-              <span>&middot;</span>
+              <span className="text-white/10">&middot;</span>
               <span>by {cmd.fromAdminName}</span>
             </div>
           </div>
@@ -110,12 +110,12 @@ export function CommandHistory({ commands }: CommandHistoryProps) {
           <div className="flex shrink-0 items-center gap-1.5">
             {getStatusIcon(cmd.status)}
             <span
-              className={`text-xs font-medium ${
+              className={`text-xs font-medium font-body ${
                 cmd.status === "pending"
-                  ? "text-yellow-400"
+                  ? "text-amber-400"
                   : cmd.status === "delivered"
-                    ? "text-blue-400"
-                    : "text-green-400"
+                    ? "text-accent"
+                    : "text-neon"
               }`}
             >
               {getStatusLabel(cmd.status)}
