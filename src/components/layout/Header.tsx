@@ -1,8 +1,8 @@
 import { UserButton, useUser } from "@clerk/clerk-react";
 import { useQuery } from "convex/react";
 import { api } from "../../../convex/_generated/api";
-import { Menu, MapPin, Building2, Settings } from "lucide-react";
-import { useNavigate } from "@tanstack/react-router";
+import { Menu, MapPin, Building2, Settings, CalendarDays } from "lucide-react";
+import { Link, useNavigate } from "@tanstack/react-router";
 
 interface HeaderProps {
   sidebarOpen: boolean;
@@ -63,6 +63,17 @@ export function Header({
             Set Up Organization
           </button>
         ) : null}
+
+        {organization && (
+          <Link to="/tasks">
+            <button
+              className="rounded-lg p-2 text-white/30 hover:bg-white/5 hover:text-white/70 transition-all duration-200"
+              title="Task Planner"
+            >
+              <CalendarDays className="h-4 w-4" />
+            </button>
+          </Link>
+        )}
 
         {organization && (
           <button

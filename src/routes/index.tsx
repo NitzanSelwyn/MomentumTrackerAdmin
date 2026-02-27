@@ -11,6 +11,8 @@ import { SendCommand } from "../components/commands/SendCommand";
 import { AddWorker } from "../components/workers/AddWorker";
 import { OrgSetup } from "../components/organizations/OrgSetup";
 import { OrgPanel } from "../components/organizations/OrgPanel";
+import { FloorPlanViewer } from "../components/floorplan/FloorPlanViewer";
+import { FloorPlanManager } from "../components/floorplan/FloorPlanManager";
 
 export const Route = createFileRoute("/")({
   component: DashboardPage,
@@ -30,6 +32,8 @@ function DashboardPage() {
   const [showAddWorker, setShowAddWorker] = useState(false);
   const [showOrgSetup, setShowOrgSetup] = useState(false);
   const [showOrgPanel, setShowOrgPanel] = useState(false);
+  const [showFloorPlanManager, setShowFloorPlanManager] = useState(false);
+  const [forceStreetMap, setForceStreetMap] = useState(false);
 
   useEffect(() => {
     if (!isLoading && !isAuthenticated) {
@@ -50,6 +54,11 @@ function DashboardPage() {
 
   const organization = useQuery(
     api.organizations.getMyOrganization,
+    isAuthenticated ? {} : "skip"
+  );
+
+  const activeFloorPlan = useQuery(
+    api.floorPlans.getActiveFloorPlan,
     isAuthenticated ? {} : "skip"
   );
 
@@ -105,12 +114,26 @@ function DashboardPage() {
         <main className="relative flex-1">
           {hasOrg ? (
             <>
-              <LiveMap
-                workers={filteredWorkers ?? []}
-                selectedWorkerId={selectedWorkerId}
-                onSelectWorker={setSelectedWorkerId}
-                onSendCommand={handleSendCommand}
-              />
+              {activeFloorPlan && !forceStreetMap ? (
+                <FloorPlanViewer
+                  floorPlan={activeFloorPlan}
+                  workers={filteredWorkers ?? []}
+                  selectedWorkerId={selectedWorkerId}
+                  onSelectWorker={setSelectedWorkerId}
+                  onSendCommand={handleSendCommand}
+                  onSwitchToMap={() => setForceStreetMap(true)}
+                  onOpenManager={() => setShowFloorPlanManager(true)}
+                />
+              ) : (
+                <LiveMap
+                  workers={filteredWorkers ?? []}
+                  selectedWorkerId={selectedWorkerId}
+                  onSelectWorker={setSelectedWorkerId}
+                  onSendCommand={handleSendCommand}
+                  onOpenFloorPlanManager={() => setShowFloorPlanManager(true)}
+                  onSwitchToFloorPlan={activeFloorPlan ? () => setForceStreetMap(false) : undefined}
+                />
+              )}
 
               {showOrgPanel && (
                 <OrgPanel
@@ -147,6 +170,10 @@ function DashboardPage() {
 
       {showAddWorker && (
         <AddWorker onClose={() => setShowAddWorker(false)} />
+      )}
+
+      {showFloorPlanManager && (
+        <FloorPlanManager onClose={() => setShowFloorPlanManager(false)} />
       )}
 
       {showCommandPanel && commandTargetId && (

@@ -9,11 +9,17 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as TasksRouteImport } from './routes/tasks'
 import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as WorkersWorkerIdRouteImport } from './routes/workers/$workerId'
 
+const TasksRoute = TasksRouteImport.update({
+  id: '/tasks',
+  path: '/tasks',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SettingsRoute = SettingsRouteImport.update({
   id: '/settings',
   path: '/settings',
@@ -39,12 +45,14 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
   '/settings': typeof SettingsRoute
+  '/tasks': typeof TasksRoute
   '/workers/$workerId': typeof WorkersWorkerIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
   '/settings': typeof SettingsRoute
+  '/tasks': typeof TasksRoute
   '/workers/$workerId': typeof WorkersWorkerIdRoute
 }
 export interface FileRoutesById {
@@ -52,25 +60,40 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
   '/settings': typeof SettingsRoute
+  '/tasks': typeof TasksRoute
   '/workers/$workerId': typeof WorkersWorkerIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/login' | '/settings' | '/workers/$workerId'
+  fullPaths: '/' | '/login' | '/settings' | '/tasks' | '/workers/$workerId'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/login' | '/settings' | '/workers/$workerId'
-  id: '__root__' | '/' | '/login' | '/settings' | '/workers/$workerId'
+  to: '/' | '/login' | '/settings' | '/tasks' | '/workers/$workerId'
+  id:
+    | '__root__'
+    | '/'
+    | '/login'
+    | '/settings'
+    | '/tasks'
+    | '/workers/$workerId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   LoginRoute: typeof LoginRoute
   SettingsRoute: typeof SettingsRoute
+  TasksRoute: typeof TasksRoute
   WorkersWorkerIdRoute: typeof WorkersWorkerIdRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/tasks': {
+      id: '/tasks'
+      path: '/tasks'
+      fullPath: '/tasks'
+      preLoaderRoute: typeof TasksRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/settings': {
       id: '/settings'
       path: '/settings'
@@ -106,6 +129,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   LoginRoute: LoginRoute,
   SettingsRoute: SettingsRoute,
+  TasksRoute: TasksRoute,
   WorkersWorkerIdRoute: WorkersWorkerIdRoute,
 }
 export const routeTree = rootRouteImport

@@ -9,8 +9,11 @@
  */
 
 import type * as commands from "../commands.js";
+import type * as floorPlans from "../floorPlans.js";
 import type * as locations from "../locations.js";
+import type * as mapZones from "../mapZones.js";
 import type * as organizations from "../organizations.js";
+import type * as tasks from "../tasks.js";
 import type * as workers from "../workers.js";
 
 import type {
@@ -21,8 +24,11 @@ import type {
 
 declare const fullApi: ApiFromModules<{
   commands: typeof commands;
+  floorPlans: typeof floorPlans;
   locations: typeof locations;
+  mapZones: typeof mapZones;
   organizations: typeof organizations;
+  tasks: typeof tasks;
   workers: typeof workers;
 }>;
 
